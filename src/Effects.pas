@@ -1,8 +1,8 @@
-unit effects_unit;
-
+unit Effects;
 
 interface
-  uses windows, main, graphics;
+  uses Windows, Graphics,
+       main
 
   procedure effect_main(effect: string; data: dword=0);
   procedure dwordToRgb(col: dword; var rgb: _rgb);

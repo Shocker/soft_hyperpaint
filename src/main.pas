@@ -3,27 +3,16 @@ unit main;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, IdTCPClient, IdBaseComponent, IdComponent,
-  IdCustomTCPServer, IdTCPServer, IdContext, StdCtrls, ExtCtrls, Menus,
-  Buttons, ComCtrls, xpman, jpeg, idglobal, IdIOHandler, IdIOHandlerStream,
-  IdTCPConnection, IdScheduler, IdSchedulerOfThread,
-  IdSchedulerOfThreadDefault, Mask;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Menus, Buttons, ComCtrls, XPMan, jpeg, Mask,
+
+  IdTCPClient, IdBaseComponent, IdComponent, IdCustomTCPServer, IdTCPServer, IdContext, IdSchedulerOfThreadDefault,
+  IdGlobal, IdIOHandler, IdIOHandlerStream, IdTCPConnection, IdScheduler, IdSchedulerOfThread,
+
+  ClientCommunication;
+
 
 type
-  TClientThread=class(TThread)
-    procedure phase_first;
-    procedure phase_last;
-
-    procedure readImage;
-    procedure got_image;
-    procedure update;
-
-    procedure drawStuff;
-    procedure drawEffects;
-
-    protected procedure execute;override;
-  end;
   _tools=(tool_simple_line, tool_rect, tool_ellipse, tool_rect_round,
           tool_crayon, tool_fill, tool_eye);
 
@@ -221,7 +210,7 @@ var
 
 implementation
 
-uses new_plan, effects_unit, clients_unit;
+uses NewFile, Effects;
 
 {$R *.dfm}
 procedure TForm1.WriteImage(cont: TIdContext);
@@ -263,13 +252,6 @@ begin
   //form1.client_log.Lines.Add('effect: '+effect);
 
   effect_main(effect, StrToIntDef(data,0));
-end;
-
-procedure TClientThread.drawEffects;
-  var effect:string;
-begin
-  effect:=Form1.tcpclient.IOHandler.ReadLn;
-  form1.drawEffects_core(effect);
 end;
 
 procedure TForm1.drawStuff_core(tmp, toolstr: string);
@@ -328,21 +310,6 @@ begin
     end;
 end;
 
-procedure TClientThread.drawStuff;
-  var client:TIdTCPClient;
-      tmp, toolstr: string;
-      {s1,s2,s3,s4: string;}
-begin
-  client:=Form1.tcpclient;
-  tmp:=client.IOHandler.ReadLn;
-  toolstr:=copy(tmp, 1, pos(':', tmp)-1);
-  delete(tmp, 1, length(toolstr)+1);
-  updstr:='DRAW '+toolstr+' @ '+tmp;
-  Synchronize(update);
-
-  form1.drawStuff_core(tmp, toolstr);
-end;
-
 procedure TForm1.server_received_effect(context: TIdContext);
   var effect, eff_orig:string;
       data: string;
@@ -384,103 +351,7 @@ begin
   //Synchronize(update);
 end;
 
-procedure TClientThread.update;
-begin
-  exit;
-  //form1.client_log.Lines.Add(updstr);
-end;
 
-procedure TClientThread.phase_last;
-begin
-  form1.connect_to_server.Enabled:=true;
-  form1.connect_to_server.Caption:='Connect';
-  form1.tcpclientDisconnected(nil);
-  form1.update_info_bars;
-end;
-
-procedure TClientThread.phase_first;
-begin
-  form1.connect_to_server.Enabled:=true;
-  form1.connect_to_server.Caption:='Disconnect';
-  form1.update_info_bars;
-end;
-
-procedure TClientThread.execute;
-  var client:TIdTCPClient;
-      tmp: string;
-      error:boolean;
-  label done;
-begin
-  FreeOnTerminate:=true;
-  client:=form1.tcpclient;
-  try
-    client.Connect;
-  except
-    updstr:='There was an error while connecting';
-    Synchronize(update);
-    Synchronize(phase_last);
-    exit;
-  end;
-
-  while not connected do sleep(100);
-  Synchronize(phase_first);
-  error:=false;
-  while not terminated do
-    begin
-      try
-        tmp:='';
-        tmp:=client.IOHandler.ReadString(5);
-      except
-        error:=true;
-      end;
-      if error then goto done;
-      if tmp<>'' then
-        begin
-          updstr:='GOT: '+tmp;
-          Synchronize(update);
-          if tmp='IMAGE' then readImage
-            else if tmp='DRAW_' then Synchronize(drawStuff)
-            else if tmp='EFECT' then Synchronize(drawEffects)
-            else if tmp='OKBYE' then Terminate;
-        end;
-    end;
-
-  done:
-  try
-    client.IOHandler.ReadLn;
-    client.Disconnect;
-    connected:=false;
-    client.Socket.Free;
-    client.IOHandler.Free;
-    ClientThread:=nil;
-  finally
-    Synchronize(phase_last);
-  end;
-end;
-
-procedure TClientThread.got_image;
-begin
-  Form1.Image1.Picture.Bitmap.LoadFromStream(image_stream);
-  saved:=false;
-  updstr:='Image received';
-  update;
-end;
-
-procedure TClientThread.readImage;
-  var size: integer;
-      tmp: string;
-begin
-  updstr:='Reading image';
-  Synchronize(update);
-  form1.tcpclient.IOHandler.readLn; //go to next line
-  tmp:=form1.tcpclient.IOHandler.readLn;
-  size:=StrToInt(tmp);
-  image_stream.Clear;
-  image_stream.Size:=size;
-  tmp:=form1.tcpclient.IOHandler.ReadString(size);
-  CopyMemory(image_stream.Memory, @tmp[1], size);
-  Synchronize(got_image);
-end;
 
 procedure TForm1.MoveTo(x,y:integer);
 begin

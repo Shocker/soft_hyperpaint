@@ -1,4 +1,4 @@
-unit new_plan;
+unit NewFile;
 
 interface
 
