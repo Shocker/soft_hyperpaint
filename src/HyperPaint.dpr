@@ -5,7 +5,8 @@ uses
   main in 'main.pas' {Form1},
   NewFile in 'NewFile.pas' {Form2},
   Effects in 'Effects.pas',
-  ClientCommunication in 'ClientCommunication.pas';
+  ClientCommunication in 'ClientCommunication.pas',
+  Server in 'Server.pas';
 
 {$R *.res}
 
