@@ -3,8 +3,8 @@ program hypernet;
 uses
   Forms,
   main in 'main.pas' {Form1},
-  new_plan in 'new_plan.pas' {Form2},
-  effects_unit in 'effects_unit.pas',
+  NewFile in 'NewFile.pas' {Form2},
+  Effects in 'Effects.pas',
   ClientCommunication in 'ClientCommunication.pas';
 
 {$R *.res}

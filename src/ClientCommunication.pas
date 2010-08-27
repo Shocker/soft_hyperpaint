@@ -2,7 +2,8 @@ unit ClientCommunication;
 
 interface
 
-uses idcontext, sysutils, classes, windows, IdTCPClient, IdBaseComponent, IdComponent;
+uses SysUtils, Classes, Windows,
+     IdContext, IdTCPClient, IdBaseComponent, IdComponent;
 
     procedure addClient(ip_port: string; context: TIdContext);
     procedure deleteClient(ip_port:string);

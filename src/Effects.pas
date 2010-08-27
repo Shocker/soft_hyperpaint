@@ -2,7 +2,7 @@ unit Effects;
 
 interface
   uses Windows, Graphics,
-       main
+       main;
 
   procedure effect_main(effect: string; data: dword=0);
   procedure dwordToRgb(col: dword; var rgb: _rgb);
