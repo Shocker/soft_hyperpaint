@@ -1,21 +1,4 @@
-to do: 
- text
- atab onMouseMove
- sincronizare
- jpeg support
- undo
-
-on release:
- onCloseQuery
- currentdir la open,save
-
-
-
-done: 
- show coordinates langa cursor
- critical sections la onConnect/onDisconnect/onExecute
- fix disconnects problems
- server disconnects before client (now disconnects all clients)
- nu lasa si client si server pe acelasi comp
- brightness/darkness/other effects
- save-ul ala la open, la new
+- JPEG Support
+- Undo
+- Correct synchronization of simultaneous drawing
+- Alt-Tabbing while drawing messes up current draw action

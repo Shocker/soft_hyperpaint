@@ -626,7 +626,7 @@ object Form1: TForm1
         245
         55)
       object client_count: TLabel
-        Left = 7
+        Left = 81
         Top = 6
         Width = 39
         Height = 13
