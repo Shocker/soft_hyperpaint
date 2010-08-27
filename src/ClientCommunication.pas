@@ -37,7 +37,7 @@ procedure tellServer(action:string;tool:string='';data:string='');
 begin
   colors:=IntToStr(foreColor)+','+IntToStr(backColor);
   brush:=IntToStr(ord(brush_style))+','+IntToStr(ord(pen_style));
-  form1.tcpclient.IOHandler.WriteLn(action+tool+':'+colors+','+brush+','+DATA);
+  tcpclient.IOHandler.WriteLn(action+tool+':'+colors+','+brush+','+DATA);
 end;
 
 procedure broadcastToClients(action:string;tool:string='';data:string=''; forwardedPaint:boolean=false);
@@ -110,7 +110,7 @@ end;
 procedure TClientThread.drawEffects;
   var effect:string;
 begin
-  effect:=Form1.tcpclient.IOHandler.ReadLn;
+  effect:=tcpclient.IOHandler.ReadLn;
   form1.drawEffects_core(effect);
 end;
 
@@ -119,7 +119,7 @@ procedure TClientThread.drawStuff;
       tmp, toolstr: string;
       {s1,s2,s3,s4: string;}
 begin
-  client:=Form1.tcpclient;
+  client:=tcpclient;
   tmp:=client.IOHandler.ReadLn;
   toolstr:=copy(tmp, 1, pos(':', tmp)-1);
   delete(tmp, 1, length(toolstr)+1);
@@ -157,7 +157,7 @@ procedure TClientThread.execute;
   label done;
 begin
   FreeOnTerminate:=true;
-  client:=form1.tcpclient;
+  client:=tcpclient;
   try
     client.Connect;
   except
@@ -217,12 +217,12 @@ procedure TClientThread.readImage;
 begin
   updstr:='Reading image';
   Synchronize(update);
-  form1.tcpclient.IOHandler.readLn; //go to next line
-  tmp:=form1.tcpclient.IOHandler.readLn;
+  tcpclient.IOHandler.readLn; //go to next line
+  tmp:=tcpclient.IOHandler.readLn;
   size:=StrToInt(tmp);
   image_stream.Clear;
   image_stream.Size:=size;
-  tmp:=form1.tcpclient.IOHandler.ReadString(size);
+  tmp:=tcpclient.IOHandler.ReadString(size);
   CopyMemory(image_stream.Memory, @tmp[1], size);
   Synchronize(got_image);
 end;

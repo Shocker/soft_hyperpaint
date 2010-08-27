@@ -17,8 +17,6 @@ type
           tool_crayon, tool_fill, tool_eye);
 
   TForm1 = class(TForm)
-    tcpserver: TIdTCPServer;
-    tcpclient: TIdTCPClient;
     MainMenu1: TMainMenu;
     Initializeshutdownsequence1: TMenuItem;
     Plans1: TMenuItem;
@@ -173,6 +171,8 @@ type
       r,g,b: byte;
   end;
 var
+  tcpclient: TIdTCPClient;
+  tcpserver: TIdTCPServer;
   ClientThread: TClientThread;
 
   Form1: TForm1;
@@ -690,6 +690,19 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
   var new_bit: TBitmap;
 begin
+  tcpclient := TIdTCPClient.Create;
+  tcpclient.IPVersion := Id_IPv4;
+  tcpclient.OnDisconnected := tcpclientDisconnected;
+  tcpclient.OnConnected := tcpclientConnected;
+  tcpclient.ConnectTimeout := 0;
+  tcpclient.Port := 6666;
+  tcpclient.ReadTimeout := -1;
+  tcpserver := TIdTCPServer.Create;
+  tcpserver.DefaultPort := 6666;
+  tcpserver.OnConnect := tcpserverConnect;
+  tcpserver.OnDisconnect := tcpserverDisconnect;
+  tcpserver.OnExecute := tcpserverExecute;
+
   if (ParamStr(1)<>'') and (FileExists(ParamStr(1))) then
     begin
       Image1.Picture.Bitmap.LoadFromFile(ParamStr(1));

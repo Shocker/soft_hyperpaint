@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 204
-  Top = 118
+  Left = 315
+  Top = 150
   Width = 727
   Height = 516
   Caption = 'HyperPaintNet by Shocker'
@@ -1434,25 +1434,6 @@ object Form1: TForm1
       TabOrder = 2
       OnChange = bar_Change
     end
-  end
-  object tcpserver: TIdTCPServer
-    Bindings = <>
-    DefaultPort = 6666
-    OnConnect = tcpserverConnect
-    OnDisconnect = tcpserverDisconnect
-    OnExecute = tcpserverExecute
-    Left = 220
-    Top = 398
-  end
-  object tcpclient: TIdTCPClient
-    OnDisconnected = tcpclientDisconnected
-    OnConnected = tcpclientConnected
-    ConnectTimeout = 0
-    IPVersion = Id_IPv4
-    Port = 6666
-    ReadTimeout = -1
-    Left = 276
-    Top = 398
   end
   object MainMenu1: TMainMenu
     Left = 246

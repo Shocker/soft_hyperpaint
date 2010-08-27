@@ -1,4 +1,4 @@
-program hypernet;
+program HyperPaint;
 
 uses
   Forms,
