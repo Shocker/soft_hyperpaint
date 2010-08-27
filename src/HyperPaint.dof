@@ -90,11 +90,12 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=
+OutputDir=..\bin\
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=Indy10\
+Packages=vcl;rtl;vclx;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;VclSmp;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;vclshlctrls;dclOfficeXP;new;MPHexEditor_D7;BSFD7;SL_D5;IndyCore70;IndySystem70;IndyProtocols70
 Conditionals=
 DebugSourceDirs=
 UsePackages=0
@@ -133,3 +134,12 @@ OriginalFilename=HyperPaintNet by Shocker
 ProductName=HyperPaintNet by Shocker
 ProductVersion=1.0.0.0
 Comments=www.ShockingSoft.com
+[HistoryLists\hlUnitAliases]
+Count=1
+Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=1
+Item0=Indy10\
+[HistoryLists\hlOutputDirectorry]
+Count=1
+Item0=..\bin\
