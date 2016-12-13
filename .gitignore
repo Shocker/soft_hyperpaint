@@ -1,0 +1,15 @@
+*.~*
+*.exe
+*.zip
+*.dcu
+*.db
+*.bmp
+*.png
+*.txt
+*.htm
+*.tmd
+*.bat
+tests/
+bin/
+Desktop.ini
+Indy10/
